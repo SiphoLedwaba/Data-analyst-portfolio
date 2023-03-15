@@ -144,3 +144,16 @@ year
 ORDER BY
 highest_CO2Emissions_metric_tonne DESC
 
+--CALCULATING THE LOWEST CARBON DIOXIDE EMISSIONS BY REGION AND YEAR
+SELECT
+Region,
+year,
+MAX (CAST(CO2_emissions_metric_tonne as float)) AS lowest_CO2Emissions_metric_tonne
+FROM
+PortfolioProject.dbo.CO2_emission
+GROUP BY 
+Region,
+year
+ORDER BY
+lowest_CO2Emissions_metric_tonne
+
