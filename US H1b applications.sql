@@ -68,12 +68,6 @@ PortfolioProject.dbo.[h-1b_data2023]
 GROUP BY 
 [Fiscal Year]
 
-
-SELECT 
-AVG([Initial Approval] )
-FROM
-PortfolioProject.dbo.[h-1b_data2021]
-
 --Finding the top 10 employers with the highest number of initial approvals in each fiscal year
 SELECT
 TOP 10
