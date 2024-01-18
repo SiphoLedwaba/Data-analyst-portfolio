@@ -50,10 +50,10 @@ def clean_and_process_data(combined_df):
     Returns:
     - pd.DataFrame: Cleaned and processed DataFrame.
     """
-    # Handle missing values
+    #Handling missing values
     combined_df = combined_df.dropna()
 
-    # Convert 'date' column to DateTime format
+    #Converting 'date' column to DateTime format
     combined_df['date'] = pd.to_datetime(combined_df['date'])
 
     return combined_df
@@ -100,7 +100,7 @@ def generate_reports(combined_df):
     Returns:
     - None
     """
-    # Daily Trading Volume Report
+    #Daily Trading Volume Report
     daily_volume_report = combined_df.groupby('date')['Daily Trading Volume'].sum().reset_index()
     plt.figure(figsize=(10, 6))
     sns.lineplot(data=daily_volume_report, x='date', y='Daily Trading Volume', marker='o')
@@ -109,7 +109,7 @@ def generate_reports(combined_df):
     plt.ylabel('Daily Trading Volume')
     plt.show()
 
-    # Volatility Report
+    #Volatility Report
     volatility_report = combined_df.groupby('date')['Volatility'].mean().reset_index()
     plt.figure(figsize=(10, 6))
     sns.lineplot(data=volatility_report, x='date', y='Volatility', marker='o')
@@ -118,7 +118,7 @@ def generate_reports(combined_df):
     plt.ylabel('Volatility')
     plt.show()
 
-    # Save the generated reports to files
+    #Saving the generated reports to files
     daily_volume_report.to_csv('daily_trading_volume_report.csv', index=False)
     volatility_report.to_csv('volatility_report.csv', index=False)
 
@@ -141,16 +141,16 @@ def interactive_daily_volume_report(ticker):
     plt.ylabel('Daily Trading Volume')
     plt.show()
 
-# Specify the path to the directory containing your CSV files
+#path to the directory containing CSV files
 csv_files_path = r'C:\Users\Snipes\OneDrive\Documents\DA Portfolio-20230122T081035Z-001\DA Portfolio\Crypto\*.csv'
 
-# Load data
+#Loading data
 dataframes = load_data(csv_files_path)
 
-# Combine DataFrames
+#Combining DataFrames
 combined_df = combine_dataframes(dataframes)
 
-# Define the list of unique tickers
+#Defining the list of unique tickers
 unique_tickers_list = ['1INCH', 'AAVE', 'ADA', 'ALGO', 'ANKR', 'APE', 'AR', 'ASTR', 'ATOM', 'AUDIO',
  'AVAX', 'AXS', 'BAT', 'BCH', 'BICO', 'BNB', 'BSV', 'BTC', 'BTG', 'BTT', 'BUSD',
  'CAKE', 'CELO', 'CFX', 'CHZ', 'COMP', 'CRO', 'CRV', 'CSPR', 'CVX', 'DAI', 'DASH',
@@ -166,28 +166,27 @@ unique_tickers_list = ['1INCH', 'AAVE', 'ADA', 'ALGO', 'ANKR', 'APE', 'AR', 'AST
  'VET', 'WAVES', 'WAXP', 'WEMIX', 'WOO', 'XAUt', 'XCH', 'XDC', 'XEC', 'XEM', 'XLM',
  'XMR', 'XRP', 'XTZ', 'YFI', 'ZEC', 'ZIL', 'ZRX']
 
-# Create 'Ticker_Category' column
+#Creating 'Ticker_Category' column
 combined_df = create_ticker_category_column(combined_df, unique_tickers_list)
 
-# Clean and process data
+#Cleaning and processing data
 combined_df = clean_and_process_data(combined_df)
 
-# Generate compliance metrics
+#Generating compliance metrics
 combined_df = generate_compliance_metrics(combined_df)
 
-# Save the cleaned and processed DataFrame to a CSV file
+#Saving the cleaned and processed DataFrame to a CSV file
 cleaned_data_path = r'C:\Users\Snipes\OneDrive\Documents\DA Portfolio-20230122T081035Z-001\DA Portfolio\Crypto\cleaned_data.csv'
 combined_df.to_csv(cleaned_data_path, index=False)
 print(f"Cleaned data saved to: {cleaned_data_path}")
 
-# Generate reports
+#Generating reports
 generate_reports(combined_df)
 
-# Step 6: Versatility and Learning - Interactive Report
-# Create a dropdown widget with unique tickers
+#Creating a dropdown widget with unique tickers
 ticker_dropdown = widgets.Dropdown(options=combined_df['ticker'].unique(), description='Select Ticker:')
 
-# Use the interact function to update the report based on the selected ticker
+#Using the interact function to update the report based on selected ticker
 interact(interactive_daily_volume_report, ticker=ticker_dropdown)
 
 # Example: Test the report generator for multiple tickers
@@ -196,10 +195,10 @@ tickers_to_test = ['BTC', 'ETH', 'XRP']
 for ticker in tickers_to_test:
     interactive_daily_volume_report(ticker)
 
-# Create an interactive daily trading volume report using Plotly
+#Creating interactive daily trading volume report using Plotly
 fig = px.line(combined_df, x='date', y='Daily Trading Volume', color='ticker', title='Interactive Daily Trading Volume Report')
 fig.update_layout(xaxis_title='Date', yaxis_title='Daily Trading Volume')
 fig.show()
 
-# Suppress the specific warning
+#Suppressing specific warnings
 warnings.filterwarnings("ignore", category=FutureWarning, module="_plotly_utils.basevalidators")
