@@ -72,9 +72,6 @@ print("GameStop Revenue:", revenue_data_gamestop)
 # Create a GameStop graph using the make_graph function
 gamestop_graph = make_graph(gamestop_stock_data, "GameStop Stock Price Over Time")
 
-# Now, you can use the tesla_graph and gamestop_graph dictionaries to create your Dash app.
-# For brevity, I'll just show how to include them in the layout.
-
 # Create a Dash app for Tesla
 app_tesla = Dash(__name__)
 
