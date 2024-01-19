@@ -8,6 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 from sklearn.metrics import make_scorer, recall_score, precision_score, f1_score
 from sklearn.model_selection import GridSearchCV
+import joblib
 
 # This lets us see all the columns, preventing Jupyter from redacting them.
 pd.set_option('display.max_columns', None)
@@ -27,9 +28,6 @@ def plot_feature_importance(importance, names, model_type='Random Forest'):
     plt.title(model_type + ' - Feature Importance')
     plt.xlabel('Feature Importance')
     plt.ylabel('Feature Names')
-
-# This module lets us save our models once we fit them.
-import joblib
 
 # Import dataset
 file_path = "C:\\Users\\Snipes\\OneDrive\\Documents\\DA Portfolio-20230122T081035Z-001\\DA Portfolio\\Waze\\waze\\Waze Lab 5\\Files\\home\\jovyan\\work\\waze_dataset.csv"
