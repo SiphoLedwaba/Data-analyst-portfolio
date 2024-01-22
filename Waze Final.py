@@ -10,10 +10,10 @@ from sklearn.metrics import make_scorer, recall_score, precision_score, f1_score
 from sklearn.model_selection import GridSearchCV
 import joblib
 
-# This lets us see all the columns, preventing Jupyter from redacting them.
+#This lets us see all the columns, preventing Jupyter from redacting them.
 pd.set_option('display.max_columns', None)
 
-# This is the function that helps plot feature importance
+#This is the function that helps plot feature importance
 def plot_feature_importance(importance, names, model_type='Random Forest'):
     feature_importance = np.array(importance)
     feature_names = np.array(names)
@@ -29,96 +29,96 @@ def plot_feature_importance(importance, names, model_type='Random Forest'):
     plt.xlabel('Feature Importance')
     plt.ylabel('Feature Names')
 
-# Import dataset
+#Import dataset
 file_path = "C:\\Users\\Snipes\\OneDrive\\Documents\\DA Portfolio-20230122T081035Z-001\\DA Portfolio\\Waze\\waze\\Waze Lab 5\\Files\\home\\jovyan\\work\\waze_dataset.csv"
 df = pd.read_csv(file_path)
 
-# Inspect the first five rows
+#Inspecting the first five rows
 print(df.head())
 
-# Copy the df dataframe
+#Copying the df dataframe
 df_copy = df.copy()
 
 print("Columns with NaN values:")
 print(df.columns[df.isnull().any()])
 
 
-# 1. Create `km_per_driving_day` feature
+# 1. Creating `km_per_driving_day` feature
 df['km_per_driving_day'] = df['driven_km_drives'] / df['driving_days']
 
-# 2. Get descriptive stats
+# 2. Getting descriptive stats
 print("Descriptive Stats for km_per_driving_day:")
 print(df['km_per_driving_day'].describe())
 
 
-# 1. Convert infinite values to zero
+# 1. Converting infinite values to zero
 df.replace([np.inf, -np.inf], 0, inplace=True)
 
-# 2. Confirm that it worked
+# 2. Confirming that it worked
 infinite_values_check = df[df['km_per_driving_day'].isin([np.inf, -np.inf])]
 print("Number of infinite values after replacement:", len(infinite_values_check))
 
-# 1. Create `percent_sessions_in_last_month` feature
+# 1. Creating `percent_sessions_in_last_month` feature
 df['percent_sessions_in_last_month'] = (df['sessions'] / df['total_sessions']) * 100
 
-# 2. Get descriptive stats
+# 2. Getting descriptive stats
 percent_sessions_stats = df['percent_sessions_in_last_month'].describe()
 print(percent_sessions_stats)
 
-# Create `professional_driver` feature
+# Creating `professional_driver` feature
 df['professional_driver'] = np.where((df['drives'] >= 60) & (df['driving_days'] >= 15), 1, 0)
 
-# Create `total_sessions_per_day` feature
+# Creating `total_sessions_per_day` feature
 df['total_sessions_per_day'] = df['total_sessions'] / df['n_days_after_onboarding']
 
-# Get descriptive stats for `total_sessions_per_day`
+# Getting descriptive stats for `total_sessions_per_day`
 total_sessions_per_day_stats = df['total_sessions_per_day'].describe()
 print(total_sessions_per_day_stats)
 
-# 1. Create `km_per_driving_day` feature
+# 1. Creating `km_per_driving_day` feature
 df['km_per_driving_day'] = df['driven_km_drives'] / np.where(df['driving_days'] == 0, 1, df['driving_days'])
 
-# 1. Create `percent_sessions_in_last_month` feature
+# 1. Creating `percent_sessions_in_last_month` feature
 df['percent_sessions_in_last_month'] = np.where(df['total_sessions'] == 0, 0, (df['sessions'] / df['total_sessions']) * 100)
 
-# Create `km_per_hour` feature
+# Creating `km_per_hour` feature
 df['km_per_hour'] = df['driven_km_drives'] / (df['duration_minutes_drives'] / 60)
 
-# Create a column representing each user's mean number of kilometers per drive made in the last month.
+# Creating a column representing each user's mean number of kilometers per drive made in the last month.
 # Then, print descriptive statistics for the feature.
 df['km_per_drive'] = df['driven_km_drives'] / df['drives']
 
-# 1. Convert infinite values to zero
+# 1. Converting infinite values to zero
 df.replace([np.inf, -np.inf], 0, inplace=True)
 
-# 2. Confirm that it worked
+# 2. Confirming that it worked
 infinite_values_check_km_per_drive = df[df['km_per_drive'].isin([np.inf, -np.inf])]
 print("Number of infinite values after replacement:", len(infinite_values_check_km_per_drive))
 
-# Print descriptive statistics for `km_per_drive`
+# Printing descriptive statistics for `km_per_drive`
 km_per_drive_stats = df['km_per_drive'].describe()
 print(km_per_drive_stats)
 
-# Create `percent_of_sessions_to_favorite` feature
+# Creating `percent_of_sessions_to_favorite` feature
 df['percent_of_sessions_to_favorite'] = (df['total_navigations_fav1'] + df['total_navigations_fav2']) / df['total_sessions'] * 100
 
-# Get descriptive stats for `percent_of_sessions_to_favorite`
+# Getting descriptive stats for `percent_of_sessions_to_favorite`
 percent_of_sessions_to_favorite_stats = df['percent_of_sessions_to_favorite'].describe()
 print(percent_of_sessions_to_favorite_stats)
 
-# Drop rows with missing values
+# Dropping rows with missing values
 df.dropna(inplace=True)
 
-# Create new `device2` variable
+# Creating new `device2` variable
 df['device2'] = df['device'].map({'Android': 0, 'iPhone': 1})
 
-# Create binary `label2` column
+# Creating binary `label2` column
 df['label2'] = np.where(df['label'] == 'retained', 0, 1)
 
-# Drop `ID` column
+# Dropping `ID` column
 df.drop('ID', axis=1, inplace=True)
 
-# Get class balance of 'label2' col
+# Getting class balance of 'label2' col
 class_balance = df['label2'].value_counts()
 print(class_balance)
 
@@ -139,7 +139,7 @@ def get_test_scores(model_name, predictions, true_labels):
 
     return results_table
 
-# Split the data into train, validation, and test sets
+# Splitting the data into train, validation, and test sets
 X = df.drop(['label', 'device', 'device2', 'label2'], axis=1)
 y = df['label2']
 
@@ -232,49 +232,49 @@ results_table_rf = make_results('Random Forest', rf_cv, 'recall')
 # Results for XGBoost
 results_table_xgb = make_results('XGBoost', xgb_cv, 'recall')
 
-# Display the results
+# Displaying the results
 print(results_table_rf)
 print(results_table_xgb)
 
-# Use random forest model to predict on validation data
+# Using random forest model to predict on validation data
 rf_val_preds = rf_cv.predict(X_val)
 
-# Get validation scores for RF model
+# Getting validation scores for RF model
 results_table_rf_val = get_test_scores('Random Forest (Validation)', rf_val_preds, y_val)
 
-# Append to the results table
+# Appending to the results table
 results_table_rf = pd.concat([results_table_rf, results_table_rf_val], ignore_index=True)
 
-# Use XGBoost model to predict on validation data
+# Using XGBoost model to predict on validation data
 xgb_val_preds = xgb_cv.predict(X_val)
 
-# Get validation scores for XGBoost model
+# Getting validation scores for XGBoost model
 results_table_xgb_val = get_test_scores('XGBoost (Validation)', xgb_val_preds, y_val)
 
 # Append to the results table
 results_table_xgb = pd.concat([results_table_xgb, results_table_xgb_val], ignore_index=True)
 
-# Use XGBoost model to predict on test data
+# Using XGBoost model to predict on test data
 xgb_test_preds = xgb_cv.predict(X_test)
 
-# Get test scores for XGBoost model
+# Getting test scores for XGBoost model
 results_table_xgb_test = get_test_scores('XGBoost (Test)', xgb_test_preds, y_test)
 
-# Append to the results table
+# Appending to the results table
 results_table_xgb = pd.concat([results_table_xgb, results_table_xgb_test], ignore_index=True)
 
-# Display final results
+# Displaying final results
 print(results_table_rf)
 print(results_table_xgb)
 
-# Generate array of values for confusion matrix
+# Generating array of values for confusion matrix
 cm_values_xgb = confusion_matrix(y_test, xgb_test_preds)
 
-# Plot confusion matrix for XGBoost model
+# Plotting confusion matrix for XGBoost model
 plot_confusion_matrix(xgb_cv, X_test, y_test, cmap='Blues', values_format='d')
 plt.title('Confusion Matrix - XGBoost (Test)')
 plt.show()
 
-# Use the plot_importance function to inspect the most important features of your final model.
+# Using the plot_importance function to inspect the most important features of your final model.
 xgb.plot_importance(xgb_cv.best_estimator_, importance_type='weight', title='Feature Importance - XGBoost')
 plt.show()
